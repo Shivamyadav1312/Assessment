@@ -1,0 +1,21 @@
+$kind: http-request
+description: Fetch products with standard pagination.
+url: "{{baseUrl}}/products?page=1&limit=10"
+method: GET
+queryParams:
+  page: "1"
+  limit: "10"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Pagination structure is present", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.success).to.eql(true);
+          pm.expect(jsonData).to.have.property('pagination');
+      });
+    language: text/javascript
+order: 2000

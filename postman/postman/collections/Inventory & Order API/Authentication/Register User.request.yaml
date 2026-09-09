@@ -1,0 +1,31 @@
+$kind: http-request
+description: Register a new user account. Returns JWT token and user info.
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "Password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has success true and token", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.success).to.eql(true);
+          pm.expect(jsonData.data).to.have.property('token');
+          if (jsonData.data && jsonData.data.token) {
+              pm.collectionVariables.set("token", jsonData.data.token);
+          }
+      });
+    language: text/javascript
+order: 1000

@@ -1,0 +1,11 @@
+# Use this workspace to collaborate
+workspace:
+  id: 9d6c33ab-22e8-4c28-88ec-9e3991a738fa
+
+localResources:
+  collections:
+    - ../Inventory-Order-API.postman_collection.json
+
+cloudResources:
+  collections:
+    ../postman/collections/Inventory & Order API: e05b9fbb-2ab9-4c9e-bc28-4ab3a1119d67

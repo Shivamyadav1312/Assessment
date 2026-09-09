@@ -1,0 +1,35 @@
+$kind: http-request
+description: Create a new product. Stores productId into collection variable.
+url: "{{baseUrl}}/products"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "name": "iPhone 15 Pro",
+      "description": "Apple smartphone with Titanium enclosure and A17 Pro chip",
+      "price": 69999,
+      "stockQuantity": 10,
+      "category": "electronics"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Product created and ID captured", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.success).to.eql(true);
+          pm.expect(jsonData.data).to.have.property('_id');
+          pm.collectionVariables.set("productId", jsonData.data._id);
+      });
+    language: text/javascript
+order: 1000

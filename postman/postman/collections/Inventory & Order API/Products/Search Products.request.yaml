@@ -1,0 +1,14 @@
+$kind: http-request
+description: Search products by name or description (case-insensitive).
+url: "{{baseUrl}}/products?search=iphone"
+method: GET
+queryParams:
+  search: iphone
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+    language: text/javascript
+order: 3000

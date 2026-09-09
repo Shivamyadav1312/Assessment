@@ -1,0 +1,21 @@
+$kind: http-request
+description: Get details of an order if it belongs to the authenticated user.
+url: "{{baseUrl}}/orders/{{orderId}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+      pm.test("Correct order returned", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.success).to.eql(true);
+          pm.expect(jsonData.data._id).to.eql(pm.collectionVariables.get("orderId"));
+      });
+    language: text/javascript
+order: 3000

@@ -1,0 +1,37 @@
+$kind: http-request
+description: Create an order with requested products. Decrements stock atomically and captures snapshots.
+url: "{{baseUrl}}/orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "products": [
+        {
+          "productId": "{{productId}}",
+          "quantity": 2
+        }
+      ]
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Order created and ID captured", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.success).to.eql(true);
+          pm.expect(jsonData.data).to.have.property('_id');
+          pm.expect(jsonData.data).to.have.property('totalAmount');
+          pm.collectionVariables.set("orderId", jsonData.data._id);
+      });
+    language: text/javascript
+order: 1000

@@ -1,0 +1,24 @@
+$kind: http-request
+description: Get all orders belonging strictly to the authenticated user.
+url: "{{baseUrl}}/orders?page=1&limit=10"
+method: GET
+queryParams:
+  page: "1"
+  limit: "10"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+      pm.test("Response contains orders array", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.success).to.eql(true);
+          pm.expect(Array.isArray(jsonData.data)).to.eql(true);
+      });
+    language: text/javascript
+order: 2000

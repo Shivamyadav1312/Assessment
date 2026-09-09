@@ -1,0 +1,7 @@
+$kind: collection
+description: Complete production-ready Postman collection for Simple Inventory & Order API technical assessment.
+variables:
+  baseUrl: http://localhost:5000/api
+  token: ""
+  productId: ""
+  orderId: ""

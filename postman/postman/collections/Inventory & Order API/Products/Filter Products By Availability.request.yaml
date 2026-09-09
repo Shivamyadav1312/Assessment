@@ -1,0 +1,14 @@
+$kind: http-request
+description: Filter products by inStock=true (stockQuantity > 0) or inStock=false (stockQuantity = 0).
+url: "{{baseUrl}}/products?inStock=true"
+method: GET
+queryParams:
+  inStock: "true"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+    language: text/javascript
+order: 5000
